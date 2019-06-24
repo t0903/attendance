@@ -3,31 +3,16 @@ package com.lyzyxy.attendance;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
 import com.lyzyxy.attendance.model.User;
 import com.lyzyxy.attendance.network.RetrofitRequest;
 import com.lyzyxy.attendance.network.result.RequestResult;
-import com.lyzyxy.attendance.service.UserService;
 import com.lyzyxy.attendance.util.AuthUtil;
-import com.lyzyxy.attendance.util.Constant;
 import com.lyzyxy.attendance.util.MsgUtil;
-
-import java.util.HashMap;
-import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class LoginActivity extends BaseActivity {
     EditText et_name, et_password;

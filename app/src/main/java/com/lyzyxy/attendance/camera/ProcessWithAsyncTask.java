@@ -1,19 +1,8 @@
 package com.lyzyxy.attendance.camera;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.Matrix;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.os.AsyncTask;
-import android.util.Log;
-
 import com.lyzyxy.attendance.util.Base64Util;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 /**
  * Created by zhantong on 16/6/15.
