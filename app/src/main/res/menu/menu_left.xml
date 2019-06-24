@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.lyzyxy.attendance.CourseListActivity">
+
+    <item android:id="@+id/create"
+        android:title="创建班课"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/join"
+        android:title="加入班课"
+        app:showAsAction="never" />
+
+</menu>

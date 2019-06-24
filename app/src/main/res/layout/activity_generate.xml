@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MatchMatch.Vertical"
+    android:background="@android:color/black"
+    android:paddingTop="80dp"
+    android:paddingBottom="80dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+
+        <LinearLayout
+            android:background="@android:color/white"
+            style="@style/MatchMatch.Vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
+
+                <ImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/logo"/>
+
+                <TextView
+                    android:id="@+id/tv_class"
+                    android:layout_toRightOf="@id/iv_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:text="2017计算机应用3班"/>
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_below="@+id/tv_class"
+                    android:layout_toRightOf="@+id/iv_logo"
+                    android:textSize="18sp"
+                    android:text="网络数据库"/>
+
+                <ImageView
+                    android:layout_below="@+id/iv_logo"
+                    android:id="@+id/iv_chinese"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:layout_marginTop="20dp"
+                    android:src="@mipmap/holder"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+</LinearLayout>
