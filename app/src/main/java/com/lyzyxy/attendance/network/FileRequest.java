@@ -36,13 +36,6 @@ public interface FileRequest {
     @POST
     Call<ResponseBody> postFile(@Header("Authorization") String token, @Url String url, @PartMap Map<String, RequestBody> paramMap,@QueryMap Map<String, Object> requestMap);
 
-    @POST
-    @FormUrlEncoded
-    Call<ResponseBody> upload(@Url String url,@Field("image") String base64, @QueryMap Map<String, Object> requestMap);
-
-    @POST
-    @FormUrlEncoded
-    Call<ResponseBody> upload(@Header("Authorization") String token,@Url String url,@Field("image") String base64, @QueryMap Map<String, Object> requestMap);
     /**
      * 下载文件get请求
      * @param url 链接地址

@@ -45,14 +45,11 @@ public class CourseListActivity extends BaseActivity {
 //            }
 //        });
 
-        Intent intent = getIntent();
-        String data = intent.getStringExtra("data");
-
         rv_course = findViewById(R.id.rv_course);
         LinearLayoutManager llm = new LinearLayoutManager(CourseListActivity.this);
         rv_course.setLayoutManager(llm);
 
-        //updateCourses();
+        updateCourses();
     }
 
     @Override

@@ -116,7 +116,7 @@ public class Base64Util {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
-    public static Bitmap byteToBitmap(byte[] frameData, Camera.Size size){
+    public static String byteToBase64(byte[] frameData, Camera.Size size){
         Bitmap bitmap = null;
         Bitmap mFaceBitmap = null;
         ByteArrayOutputStream mBitmapOutput = null;
@@ -132,7 +132,9 @@ public class Base64Util {
             if (bitmap != null) {
                 mBitmapOutput.reset();
                 bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mMatrix, false);
-                return bitmap;
+
+                String base64 = bitmapToBase64(bitmap);
+                return base64;
             }
         } catch (Exception e) {
             e.printStackTrace();

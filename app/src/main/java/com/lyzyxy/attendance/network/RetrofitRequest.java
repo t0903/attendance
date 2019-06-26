@@ -193,61 +193,6 @@ public class RetrofitRequest {
         });
     }
 
-    public static <T> void upload(String url, String base64,Map<String, Object> requestMap, String token, final Class<T> clazz,final boolean isList, final ResultHandler<T> resultHandler) {
-        // 判断网络连接状况
-        if (resultHandler.isNetDisconnected()) {
-            resultHandler.onAfterFailure();
-            return;
-        }
-
-        FileRequest fileRequest = retrofit.create(FileRequest.class);
-
-        Call<ResponseBody> call = null;
-
-        if(token != null && !token.equals("")){
-            call = fileRequest.upload(token, url,base64,requestMap);
-        }else{
-            call = fileRequest.upload(url, base64,requestMap);
-        }
-
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                resultHandler.onBeforeResult();
-                try {
-                    ResponseBody body = response.body();
-                    if (body == null) {
-                        ResponseBody errorBody = response.errorBody();
-                        String err = errorBody.string();
-                        RequestResult result = RequestResult.fromJsonObject(err,String.class);
-
-                        resultHandler.onServerError(result);
-                        resultHandler.onAfterFailure();
-                        return;
-                    }
-                    String string = body.string();
-                    RequestResult requestResult = null;
-                    if(isList)
-                        requestResult = RequestResult.fromJsonArray(string,clazz);
-                    else
-                        requestResult = RequestResult.fromJsonObject(string,clazz);
-
-                    resultHandler.onResult(requestResult);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    resultHandler.onFailure(e);
-                    resultHandler.onAfterFailure();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                resultHandler.onFailure(t);
-                resultHandler.onAfterFailure();
-            }
-        });
-    }
-
     /**
      * 发送上传文件网络请求
      * @param url 请求地址

@@ -44,8 +44,8 @@ public class QiniuUploadManager {
 
     public static QiniuUploadManager getInstance(Context context) {
         if (manager == null) {
-            synchronized(QiniuUploadManager.class) {
-                if(manager == null) {
+            synchronized (QiniuUploadManager.class) {
+                if (manager == null) {
                     manager = new QiniuUploadManager(context);
                 }
             }
@@ -106,108 +106,63 @@ public class QiniuUploadManager {
         uploadListeners.add(uploadListener);
         cancels.put(uploadListener, false);
 
-        if(param.isPath()) {
-            File uploadFile = new File(param.getFilePath());
-            if (!uploadFile.exists() || uploadFile.isDirectory()) {
-                return false; // 如果是文件夹，或者文件不存在，那么返回false
-            }
-
-            uploadManager.put(uploadFile, param.getKey(), param.getToken(),
-                    (key, info, response) -> {
-                        synchronized (lock) {
-                            if (uploadListener == null) {
-                                return;
-                            }
-                            if (info.isOK()) {
-                                Log.d(TAG, "上传成功(" + key + "): " + info.duration);
-                                uploadListener.onUploadBlockComplete(key);
-                                uploadListener.onUploadCompleted();
-                            } else {
-                                Log.d(TAG, "上传失败(" + key + "): " + info.error);
-                                uploadListener.onUploadFailed(key, info.error);
-                            }
-                            // 清理回调等资源
-                            Log.d(TAG, "上传完成(" + key + "): " + info.duration);
-                            uploadListeners.remove(uploadListener);
-                            cancels.remove(uploadListener);
-                        }
-                    },
-                    new UploadOptions(null, null, false,
-                            (key12, percent) -> {
-                                synchronized (lock) {
-                                    Log.d(TAG, "progress(" + key12 + "):" + percent);
-                                    if (uploadListener != null) {
-                                        uploadListener.onUploadProgress(key12, percent);
-                                    }
-                                }
-                            },
-                            () -> {
-                                synchronized (lock) {
-                                    if (uploadListener == null) {
-                                        return false;
-                                    }
-                                    Boolean result = cancels.get(uploadListener);
-                                    // Log.d(TAG, "检查取消标识(" + param.getKey() + "): " + result);
-                                    if (result != null && result) {
-                                        cancels.remove(uploadListener);
-                                    }
-                                    // 有出现一次true后还继续调用的情况，需要判null
-                                    return result == null ? true : result;
-                                }
-                            }));
-            return true;
-
-        }else{
-            uploadManager.put(param.getData(), param.getKey(), param.getToken(),
-                    (key, info, response) -> {
-                        synchronized (lock) {
-                            if (uploadListener == null) {
-                                return;
-                            }
-                            if (info.isOK()) {
-                                Log.d(TAG, "上传成功(" + key + "): " + info.duration);
-                                uploadListener.onUploadBlockComplete(key);
-                                uploadListener.onUploadCompleted();
-                            } else {
-                                Log.d(TAG, "上传失败(" + key + "): " + info.error);
-                                uploadListener.onUploadFailed(key, info.error);
-                            }
-                            // 清理回调等资源
-                            Log.d(TAG, "上传完成(" + key + "): " + info.duration);
-                            uploadListeners.remove(uploadListener);
-                            cancels.remove(uploadListener);
-                        }
-                    },
-                    new UploadOptions(null, null, false,
-                            (key12, percent) -> {
-                                synchronized (lock) {
-                                    Log.d(TAG, "progress(" + key12 + "):" + percent);
-                                    if (uploadListener != null) {
-                                        uploadListener.onUploadProgress(key12, percent);
-                                    }
-                                }
-                            },
-                            () -> {
-                                synchronized (lock) {
-                                    if (uploadListener == null) {
-                                        return false;
-                                    }
-                                    Boolean result = cancels.get(uploadListener);
-                                    // Log.d(TAG, "检查取消标识(" + param.getKey() + "): " + result);
-                                    if (result != null && result) {
-                                        cancels.remove(uploadListener);
-                                    }
-                                    // 有出现一次true后还继续调用的情况，需要判null
-                                    return result == null ? true : result;
-                                }
-                            }));
-            return true;
+        File uploadFile = new File(param.getFilePath());
+        if (!uploadFile.exists() || uploadFile.isDirectory()) {
+            return false; // 如果是文件夹，或者文件不存在，那么返回false
         }
+
+        uploadManager.put(uploadFile, param.getKey(), param.getToken(),
+                (key, info, response) -> {
+                    synchronized (lock) {
+                        if (uploadListener == null) {
+                            return;
+                        }
+                        if (info.isOK()) {
+                            Log.d(TAG, "上传成功(" + key + "): " + info.duration);
+                            uploadListener.onUploadBlockComplete(key);
+                            uploadListener.onUploadCompleted();
+                        } else {
+                            Log.d(TAG, "上传失败(" + key + "): " + info.error);
+                            uploadListener.onUploadFailed(key, info.error);
+                        }
+                        // 清理回调等资源
+                        Log.d(TAG, "上传完成(" + key + "): " + info.duration);
+                        uploadListeners.remove(uploadListener);
+                        cancels.remove(uploadListener);
+                    }
+                },
+                new UploadOptions(null, null, false,
+                        (key12, percent) -> {
+                            synchronized (lock) {
+                                Log.d(TAG, "progress(" + key12 + "):" + percent);
+                                if (uploadListener != null) {
+                                    uploadListener.onUploadProgress(key12, percent);
+                                }
+                            }
+                        },
+                        () -> {
+                            synchronized (lock) {
+                                if (uploadListener == null) {
+                                    return false;
+                                }
+                                Boolean result = cancels.get(uploadListener);
+                                // Log.d(TAG, "检查取消标识(" + param.getKey() + "): " + result);
+                                if (result != null && result) {
+                                    cancels.remove(uploadListener);
+                                }
+                                // 有出现一次true后还继续调用的情况，需要判null
+                                return result == null ? true : result;
+                            }
+                        }));
+        return true;
+
+
     }
 
     /**
      * 同时上传多个文件
-     * @param params 需要上传的文件
+     *
+     * @param params         需要上传的文件
      * @param uploadListener 回调
      * @return 开始上传返回 true，如果参数无效，或者文件不存在等，返回false，不上传
      */
@@ -243,14 +198,14 @@ public class QiniuUploadManager {
                                 return;
                             }
                             if (info.isOK()) {
-                                Log.d(TAG, "上传成功(" + key +"): " + info.duration);
+                                Log.d(TAG, "上传成功(" + key + "): " + info.duration);
                                 uploadListener.onUploadBlockComplete(key);
                             } else {
                                 Log.d(TAG, "上传失败(" + key + "): " + info.error);
                                 uploadListener.onUploadFailed(key, info.error);
                             }
                             if (completedCount.get() == needUploadFile.size()) {
-                                Log.d(TAG, "上传完成(" + needUploadFile.size() +")");
+                                Log.d(TAG, "上传完成(" + needUploadFile.size() + ")");
                                 uploadListener.onUploadCompleted();
                                 // 如果所有任务都完成了，那么清理回调资源
                                 uploadListeners.remove(uploadListener);
@@ -287,7 +242,8 @@ public class QiniuUploadManager {
     /**
      * 排队的方式上传文件，上传完前一个才继续上传下一个
      * 注意，这个方法没有 onStartUpload 回调
-     * @param params 需要上传的文件
+     *
+     * @param params         需要上传的文件
      * @param uploadListener 回调接口
      */
     public synchronized void queueUpload(Queue<QiniuUploadFile> params, OnUploadListener uploadListener) {
@@ -295,21 +251,21 @@ public class QiniuUploadManager {
             return;
         }
         Queue<QiniuUploadFile> files = new LinkedList<>();
-        for(QiniuUploadFile param : params) {
+        for (QiniuUploadFile param : params) {
             File uploadFile = new File(param.getFilePath());
             if (uploadFile.exists() && !uploadFile.isDirectory()) {
                 files.add(param);
             }
         }
         QiniuUploadFile param = files.poll();
-        if(param == null) {
+        if (param == null) {
             return;
         }
         File uploadFile = new File(param.getFilePath());
         // 注册回调对象
         uploadListeners.add(uploadListener);
         Boolean cancel = cancels.get(uploadListener);
-        if(cancel != null && cancel) {
+        if (cancel != null && cancel) {
             cancels.remove(uploadListener); // 在这里移除取消任务标志
             return;
         }
@@ -318,20 +274,20 @@ public class QiniuUploadManager {
                 (key, info, response) -> {
                     synchronized (lock) {
                         if (info.isOK()) {
-                            Log.d(TAG, "上传成功(" + key +"): " + info.duration);
-                            if(uploadListener != null) {
+                            Log.d(TAG, "上传成功(" + key + "): " + info.duration);
+                            if (uploadListener != null) {
                                 uploadListener.onUploadBlockComplete(key);
                             }
                         } else {
                             Log.d(TAG, "上传失败(" + key + "): " + info.error);
-                            if(uploadListener != null) {
+                            if (uploadListener != null) {
                                 uploadListener.onUploadFailed(key, info.error);
                             }
                         }
-                        if(files.size() == 0) {
+                        if (files.size() == 0) {
                             // 清理回调等资源
                             Log.d(TAG, "上传完成(" + key + "): " + info.duration);
-                            if(uploadListener != null) {
+                            if (uploadListener != null) {
                                 uploadListeners.remove(uploadListener);
                                 cancels.remove(uploadListener);
                             }
@@ -408,26 +364,15 @@ public class QiniuUploadManager {
 
     public static class QiniuUploadFile {
         private String filePath;  // 文件的路径
-        private byte[] data;      //字节，filePath和data只需要一个
         private String key;       // 文件上传到服务器的路径，如：files/images/test.jpg
         private String mimeType;  // 文件类型
         private String token;     // 从后台获取的token值，只在一定时间内有效
-        private boolean path;
 
         public QiniuUploadFile(String filePath, String key, String mimeType, String token) {
             this.filePath = filePath;
             this.key = key;
             this.mimeType = mimeType;
             this.token = token;
-            this.path = true;
-        }
-
-        public QiniuUploadFile(byte[] data,String key, String mimeType, String token){
-            this.data = data;
-            this.key = key;
-            this.mimeType = mimeType;
-            this.token = token;
-            this.path = false;
         }
 
         public String getFilePath() {
@@ -444,14 +389,6 @@ public class QiniuUploadManager {
 
         public String getToken() {
             return token;
-        }
-
-        public byte[] getData() {
-            return data;
-        }
-
-        public boolean isPath() {
-            return path;
         }
     }
 }

@@ -15,6 +15,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private SurfaceHolder mHolder;
     private Camera mCamera;
     private Camera.Size size;
+    private int mOrienta = 90;
 
     public CameraPreview(Context context) {
         super(context);
@@ -46,7 +47,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         size = mCamera.getParameters().getPreviewSize();
         try {
             mCamera.setPreviewDisplay(holder);
-            mCamera.setDisplayOrientation(90);
+            mCamera.setDisplayOrientation(mOrienta);
             mCamera.startPreview();
         } catch (IOException e) {
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
@@ -66,7 +67,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-        new ProcessWithAsyncTask(size).execute(data);
+        if(ProcessWithAsyncTask.upload == false)
+            new ProcessWithAsyncTask(getContext(), size).execute(data);
     }
 
     private class CameraHandlerThread extends HandlerThread {

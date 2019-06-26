@@ -2,6 +2,7 @@ package com.lyzyxy.attendance;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,18 @@ public class RegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        toolbar.setNavigationIcon(R.drawable.icon_back);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RegisterActivity.this.finish();
+            }
+        });
 
         et_name = findViewById(R.id.et_name);
         et_password = findViewById(R.id.et_password);
@@ -57,16 +70,19 @@ public class RegisterActivity extends BaseActivity {
                     params.put("name",name);
                     params.put("password",password);
                     params.put("isTeacher",isteacher);
-                    RetrofitRequest.sendPostRequest(url, params, null, null, false,
-                            new RetrofitRequest.ResultHandler(RegisterActivity.this) {
+                    RetrofitRequest.sendPostRequest(url, params, null, User.class, false,
+                            new RetrofitRequest.ResultHandler<User>(RegisterActivity.this) {
                                 @Override
                                 public void onBeforeResult() {
                                     // 这里可以放关闭loading
                                 }
 
                                 @Override
-                                public void onResult(RequestResult r) {
+                                public void onResult(RequestResult<User> r) {
                                     if(r.getCode() == Constant.SUCCESS){
+                                        //TODO 页面跳转
+                                        AuthUtil.user = r.getData();
+                                        UploadActivity.startActivity(RegisterActivity.this,UploadActivity.class);
                                         RegisterActivity.this.finish();
                                     }else if(!r.getMsg().equals("")){
                                         MsgUtil.msg(RegisterActivity.this,r.getMsg());
