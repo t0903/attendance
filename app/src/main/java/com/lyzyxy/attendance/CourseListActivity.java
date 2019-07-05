@@ -2,6 +2,7 @@ package com.lyzyxy.attendance;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 public class CourseListActivity extends BaseActivity {
+    private List<Course> courseList;
     CourseAdapter adapter;
-    List<Course> courseList;
     RecyclerView rv_course;
 
     @Override
@@ -49,7 +50,28 @@ public class CourseListActivity extends BaseActivity {
         LinearLayoutManager llm = new LinearLayoutManager(CourseListActivity.this);
         rv_course.setLayoutManager(llm);
 
+
+
         updateCourses();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data != null) {
+            switch (requestCode) {
+                case 1:
+                    if(resultCode == RESULT_OK) {
+                        Course course = (Course) data.getSerializableExtra("data");
+
+                        if (course != null) {
+                            courseList.add(course);
+                            adapter.setData(courseList);
+                        }
+                    }
+                    break;
+                default:
+            }
+        }
     }
 
     @Override
@@ -67,7 +89,8 @@ public class CourseListActivity extends BaseActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.create:
-                AddActivity.startActivity(CourseListActivity.this,AddActivity.class);
+                AddActivity.startActivityForResult(CourseListActivity.this,AddActivity.class,1);
+                //AddActivity.startActivity(CourseListActivity.this,AddActivity.class);
                 break;
 
             case R.id.join:
@@ -113,7 +136,8 @@ public class CourseListActivity extends BaseActivity {
                     @Override
                     public void onResult(RequestResult<List<Course>> r) {
                         if(r.getCode() == Constant.SUCCESS){
-                            adapter = new CourseAdapter(CourseListActivity.this,r.getData());
+                            courseList = r.getData();
+                            adapter = new CourseAdapter(CourseListActivity.this,courseList);
                             rv_course.setAdapter(adapter);
                         }else if(!r.getMsg().equals("")){
                             MsgUtil.msg(CourseListActivity.this,r.getMsg());

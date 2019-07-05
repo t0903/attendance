@@ -1,7 +1,10 @@
 package com.lyzyxy.attendance;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +29,18 @@ public class AddActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        toolbar.setNavigationIcon(R.drawable.icon_back);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddActivity.this.finish();
+            }
+        });
 
 //        iv_add = findViewById(R.id.iv_add);
 //        iv_add.setOnClickListener(new View.OnClickListener() {
@@ -61,10 +76,11 @@ public class AddActivity extends BaseActivity {
                             public void onResult(RequestResult<Course> r) {
                                 if(r.getCode() == Constant.SUCCESS){
                                     Course c = r.getData();
-                                    GenerateActivity.startActivity(AddActivity.this,GenerateActivity.class,
-                                            c.getId());
+                                    GenerateActivity.startActivityForResult(AddActivity.this,GenerateActivity.class,c,2);
+                                    //GenerateActivity.startActivity(AddActivity.this,GenerateActivity.class,
+                                    //        c);
 
-                                    AddActivity.this.finish();
+                                    //AddActivity.this.finish();
                                 }else if(!r.getMsg().equals("")){
                                     MsgUtil.msg(AddActivity.this,r.getMsg());
                                 }else{
@@ -79,5 +95,19 @@ public class AddActivity extends BaseActivity {
                         });
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 2:
+                if(resultCode == RESULT_OK) {
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+                break;
+            default:
+        }
+
     }
 }

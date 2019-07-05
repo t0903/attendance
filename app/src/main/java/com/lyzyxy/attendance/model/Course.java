@@ -1,6 +1,8 @@
 package com.lyzyxy.attendance.model;
 
-public class Course {
+import java.io.Serializable;
+
+public class Course implements Serializable {
     private int id;
     private String name;
     private String className;

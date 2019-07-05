@@ -16,25 +16,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignActivity">
-
-        </activity>
-        <activity android:name=".UploadActivity">
-
-        </activity>
-        <activity android:name=".GenerateActivity" />
-        <activity android:name=".RegisterActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".AddActivity" />
         <activity
-            android:name=".CourseListActivity"
-            android:label="@string/title_activity_course_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".LoginActivity" >
+            android:name=".MemberActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".SignActivity"></activity>
+        <activity android:name=".UploadActivity"></activity>
+        <activity
+            android:name=".GenerateActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CourseListActivity"
+            android:label="@string/title_activity_course_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".LoginActivity">
+
         </activity>
         <activity android:name=".ScanActivity" />
         <activity android:name=".MainActivity" /> <!-- 7.0以上摄像头调取 -->

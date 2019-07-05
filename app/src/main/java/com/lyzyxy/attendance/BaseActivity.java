@@ -25,4 +25,9 @@ public class BaseActivity extends AppCompatActivity {
         Intent intent = new Intent(context, cls);
         context.startActivity(intent);
     }
+
+    public static void startActivityForResult(Context context,Class<?> cls,int requestCode) {
+        Intent intent = new Intent(context, cls);
+        ((AppCompatActivity)context).startActivityForResult(intent,requestCode);
+    }
 }
