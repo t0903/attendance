@@ -1,12 +1,24 @@
 package com.lyzyxy.attendance;
 
+import android.content.Intent;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.lyzyxy.attendance.model.User;
+import com.lyzyxy.attendance.network.RetrofitRequest;
+import com.lyzyxy.attendance.network.result.RequestResult;
+import com.lyzyxy.attendance.util.AuthUtil;
+import com.lyzyxy.attendance.util.Constant;
+import com.lyzyxy.attendance.util.MsgUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
@@ -23,6 +35,18 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate, V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        toolbar.setNavigationIcon(R.drawable.icon_back);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ScanActivity.this.finish();
+            }
+        });
 
         mZXingView = findViewById(R.id.zbarview);
         mZXingView.setDelegate(this);
@@ -61,10 +85,51 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate, V
     public void onScanQRCodeSuccess(String result) {
         Log.i(TAG, "result:" + result);
 
-        Toast.makeText(ScanActivity.this,"扫描结果为：" + result,Toast.LENGTH_SHORT).show();
-        vibrate();
+        //Toast.makeText(ScanActivity.this,"扫描结果为：" + result,Toast.LENGTH_SHORT).show();
+        if(result.startsWith("content:id:")){
+            int id = Integer.parseInt(result.substring(11));
+            joinCourse(id);
+        }else{
+            Toast.makeText(ScanActivity.this,"二维码不正确！",Toast.LENGTH_SHORT).show();
+            vibrate();
 
-        mZXingView.startSpot(); // 开始识别
+            mZXingView.startSpot(); // 重新开始识别
+        }
+    }
+
+    private void joinCourse(int id){
+        String url = Constant.URL_BASE + "user/join";
+        Map<String,Object> params = new HashMap<String, Object>();
+        params.put("userId",AuthUtil.user.getId());
+        params.put("classId",id);
+        RetrofitRequest.sendPostRequest(url, params, null, null, false,
+                new RetrofitRequest.ResultHandler(ScanActivity.this) {
+                    @Override
+                    public void onBeforeResult() {
+                        // 这里可以放关闭loading
+                    }
+
+                    @Override
+                    public void onResult(RequestResult r) {
+                        if(r.getCode() == Constant.SUCCESS){
+                            vibrate();
+
+                            Intent intent=new Intent();
+                            setResult(RESULT_OK, intent);
+
+                            finish();
+                        }else if(!r.getMsg().equals("")){
+                            MsgUtil.msg(ScanActivity.this,r.getMsg());
+                        }else{
+                            MsgUtil.msg(ScanActivity.this,R.string.net_server_error);
+                        }
+                    }
+
+                    @Override
+                    public void onAfterFailure() {
+                        // 这里可以放关闭loading
+                    }
+                });
     }
 
     @Override

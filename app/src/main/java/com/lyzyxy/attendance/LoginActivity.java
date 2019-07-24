@@ -27,7 +27,8 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
 
         if(AuthUtil.user != null){
-            CourseListActivity.startActivity(LoginActivity.this,CourseListActivity.class);
+            //CourseListActivity.startActivity(LoginActivity.this,CourseListActivity.class);
+            CourseActivity.startActivity(LoginActivity.this,CourseActivity.class);
             finish();
         }
 
@@ -79,7 +80,9 @@ public class LoginActivity extends BaseActivity {
                             }
                             editor.apply();
 
-                            CourseListActivity.startActivity(LoginActivity.this,CourseListActivity.class);
+                            //CourseListActivity.startActivity(LoginActivity.this,CourseListActivity.class);
+                            CourseActivity.startActivity(LoginActivity.this,CourseActivity.class);
+
                             finish();
                         }
 

@@ -295,7 +295,9 @@ public class UploadActivity extends BaseActivity {
                             String path = t.getData();
                             MsgUtil.msg(UploadActivity.this,t.getMsg());
 
-                            CourseListActivity.startActivity(UploadActivity.this,CourseListActivity.class);
+                            //CourseListActivity.startActivity(UploadActivity.this,CourseListActivity.class);
+                            CourseActivity.startActivity(UploadActivity.this,CourseActivity.class);
+
                             UploadActivity.this.finish();
                         }else if(!t.getMsg().equals("")){
                             MsgUtil.msg(UploadActivity.this,t.getMsg());
