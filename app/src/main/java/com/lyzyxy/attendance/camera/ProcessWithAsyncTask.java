@@ -10,21 +10,11 @@ import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 
-import com.lyzyxy.attendance.BaseActivity;
-import com.lyzyxy.attendance.SignActivity;
-import com.lyzyxy.attendance.UploadActivity;
 import com.lyzyxy.attendance.network.RetrofitRequest;
 import com.lyzyxy.attendance.network.result.RequestResult;
-import com.lyzyxy.attendance.util.Base64Util;
 import com.lyzyxy.attendance.util.Constant;
-import com.lyzyxy.attendance.util.ImageUtil;
-import com.lyzyxy.attendance.util.MsgUtil;
-import com.lyzyxy.attendance.util.QiniuUtil;
 import com.zxy.tiny.Tiny;
-import com.zxy.tiny.callback.BitmapCallback;
 import com.zxy.tiny.callback.FileWithBitmapCallback;
-import com.zxy.tiny.core.CompressKit;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -77,7 +67,7 @@ public class ProcessWithAsyncTask extends AsyncTask<byte[], Void, String> {
 
                         Map<String, Object> requestMap = new HashMap<>();
 
-                        RetrofitRequest.fileUpload(url, file,requestMap, null, String.class, false,
+                        RetrofitRequest.fileUpload(url, file,requestMap,String.class, false,
                                 new RetrofitRequest.ResultHandler<String>(context) {
 
                                     @Override

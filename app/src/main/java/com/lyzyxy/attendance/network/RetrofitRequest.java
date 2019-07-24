@@ -75,7 +75,7 @@ public class RetrofitRequest {
      * @param resultHandler 回调
      * @param <T> 泛型
      */
-    public static <T> void sendGetRequest(String url, Map<String, Object> paramMap,String token, final Class<T> clazz, final boolean isList, final ResultHandler resultHandler) {
+    public static <T> void sendGetRequest(String url, Map<String, Object> paramMap,final Class<T> clazz, final boolean isList, final ResultHandler resultHandler) {
         // 判断网络连接状况
         if (resultHandler.isNetDisconnected()) {
             resultHandler.onAfterFailure();
@@ -86,11 +86,7 @@ public class RetrofitRequest {
 
         Call<ResponseBody> call = null;
         // 构建请求
-        if(token != null && !token.equals("")){
-            call = getRequest.getUrl(token,url,paramMap);
-        }else{
-            call = getRequest.getUrl(url,paramMap);
-        }
+        call = getRequest.getUrl(url,paramMap);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -139,7 +135,7 @@ public class RetrofitRequest {
      * @param resultHandler 回调
      * @param <T> 泛型
      */
-    public static <T> void sendPostRequest(String url, Map<String, Object> paramMap, String token,final Class<T> clazz,final boolean isList, final ResultHandler resultHandler) {
+    public static <T> void sendPostRequest(String url, Map<String, Object> paramMap,final Class<T> clazz,final boolean isList, final ResultHandler resultHandler) {
         // 判断网络连接状况
         if (resultHandler.isNetDisconnected()) {
             resultHandler.onAfterFailure();
@@ -149,11 +145,8 @@ public class RetrofitRequest {
 
         Call<ResponseBody> call = null;
         // 构建请求
-        if(token != null && !token.equals("")){
-            call = postRequest.postMap(token,url, paramMap);
-        }else{
-            call = postRequest.postMap(url, paramMap);
-        }
+        call = postRequest.postMap(url, paramMap);
+
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -201,7 +194,7 @@ public class RetrofitRequest {
      * @param resultHandler 回调
      * @param <T> 泛型
      */
-    public static <T> void fileUpload(String url, File file,Map<String, Object> requestMap, String token, final Class<T> clazz,final boolean isList, final ResultHandler<T> resultHandler) {
+    public static <T> void fileUpload(String url, File file,Map<String, Object> requestMap,final Class<T> clazz,final boolean isList, final ResultHandler<T> resultHandler) {
         // 判断网络连接状况
         if (resultHandler.isNetDisconnected()) {
             resultHandler.onAfterFailure();
@@ -214,11 +207,7 @@ public class RetrofitRequest {
 
         Call<ResponseBody> call = null;
 
-        if(token != null && !token.equals("")){
-            call = fileRequest.postFile(token, url, paramMap,requestMap);
-        }else{
-            call = fileRequest.postFile(url, paramMap,requestMap);
-        }
+        call = fileRequest.postFile(url, paramMap,requestMap);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -346,12 +335,8 @@ public class RetrofitRequest {
          * 服务器出错
          */
         public void onServerError(RequestResult err) {
-            if(err.getCode() == 401){
-                AuthUtil.auth(context);
-            }else {
-                // 服务器处理出错
-                Toast.makeText(context, R.string.net_server_error, Toast.LENGTH_SHORT).show();
-            }
+            // 服务器处理出错
+            Toast.makeText(context, R.string.net_server_error, Toast.LENGTH_SHORT).show();
         }
 
         /**

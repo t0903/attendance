@@ -126,7 +126,7 @@ public class CourseListActivity extends BaseActivity {
         String url = Constant.URL_BASE + "course/getCourses";
         Map<String,Object> params = new HashMap<String, Object>();
         params.put("id", AuthUtil.user.getId());
-        RetrofitRequest.sendPostRequest(url, params, AuthUtil.user.getToken(), Course.class, true,
+        RetrofitRequest.sendPostRequest(url, params, Course.class, true,
                 new RetrofitRequest.ResultHandler<List<Course>>(CourseListActivity.this) {
                     @Override
                     public void onBeforeResult() {

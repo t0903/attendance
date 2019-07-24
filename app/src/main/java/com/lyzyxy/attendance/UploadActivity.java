@@ -281,7 +281,7 @@ public class UploadActivity extends BaseActivity {
         requestMap.put("id",id);
         requestMap.put("name",name);
 
-        RetrofitRequest.fileUpload(url, file,requestMap, null, String.class, false,
+        RetrofitRequest.fileUpload(url, file,requestMap,String.class, false,
                 new RetrofitRequest.ResultHandler<String>(UploadActivity.this) {
 
                     @Override

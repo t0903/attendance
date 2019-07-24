@@ -24,9 +24,4 @@ public interface PostRequest{
     @FormUrlEncoded
     @POST
     Call<ResponseBody> postMap(@Url String url, @FieldMap Map<String, Object> requestMap);
-
-    @FormUrlEncoded
-    @POST
-    Call<ResponseBody> postMap(@Header("Authorization") String token, @Url String url, @FieldMap Map<String, Object> requestMap);
-
 }

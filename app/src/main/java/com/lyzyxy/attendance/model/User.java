@@ -8,7 +8,6 @@ public class User {
     private String no;
     private String photo;
     private int isTeacher;
-    private String token;
 
     public int getId() {
         return id;
@@ -64,13 +63,5 @@ public class User {
 
     public void setIsTeacher(int isTeacher) {
         this.isTeacher = isTeacher;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 }

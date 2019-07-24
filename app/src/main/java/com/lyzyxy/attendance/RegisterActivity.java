@@ -70,7 +70,7 @@ public class RegisterActivity extends BaseActivity {
                     params.put("name",name);
                     params.put("password",password);
                     params.put("isTeacher",isteacher);
-                    RetrofitRequest.sendPostRequest(url, params, null, User.class, false,
+                    RetrofitRequest.sendPostRequest(url, params, User.class, false,
                             new RetrofitRequest.ResultHandler<User>(RegisterActivity.this) {
                                 @Override
                                 public void onBeforeResult() {

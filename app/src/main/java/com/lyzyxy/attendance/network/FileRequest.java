@@ -32,10 +32,6 @@ public interface FileRequest {
     @POST
     Call<ResponseBody> postFile(@Url String url, @PartMap Map<String, RequestBody> paramMap,@QueryMap Map<String, Object> requestMap);
 
-    @Multipart
-    @POST
-    Call<ResponseBody> postFile(@Header("Authorization") String token, @Url String url, @PartMap Map<String, RequestBody> paramMap,@QueryMap Map<String, Object> requestMap);
-
     /**
      * 下载文件get请求
      * @param url 链接地址
@@ -44,8 +40,4 @@ public interface FileRequest {
     @Streaming
     @GET
     Call<ResponseBody> download(@Url String url);
-
-    @Streaming
-    @GET
-    Call<ResponseBody> download(@Header("Authorization") String token,@Url String url);
 }

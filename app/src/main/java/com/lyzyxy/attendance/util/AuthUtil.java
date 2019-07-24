@@ -16,15 +16,15 @@ import java.util.Map;
 public class AuthUtil {
     public static User user;
 
-    public static void auth(String username, String password,final RetrofitRequest.ResultHandler resultHandler) {
+    public static void login(String username, String password,final RetrofitRequest.ResultHandler resultHandler) {
         Map<String, Object> params = new HashMap<>();
         params.put("username", username);
         params.put("password", password);
-        RetrofitRequest.sendGetRequest(Constant.URL_AUTH, params, null, User.class, false,resultHandler);
+        RetrofitRequest.sendGetRequest(Constant.URL_AUTH, params,User.class, false,resultHandler);
     }
 
-    public static void auth(final Context context){
-        auth(user.getUsername(),user.getPassword(),new RetrofitRequest.ResultHandler<User>(context) {
+    public static void login(final Context context){
+        login(user.getUsername(),user.getPassword(),new RetrofitRequest.ResultHandler<User>(context) {
             @Override
             public void onBeforeResult() {
                 // 这里可以放关闭loading

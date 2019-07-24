@@ -102,7 +102,7 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate, V
         Map<String,Object> params = new HashMap<String, Object>();
         params.put("userId",AuthUtil.user.getId());
         params.put("classId",id);
-        RetrofitRequest.sendPostRequest(url, params, null, null, false,
+        RetrofitRequest.sendPostRequest(url, params,null, false,
                 new RetrofitRequest.ResultHandler(ScanActivity.this) {
                     @Override
                     public void onBeforeResult() {

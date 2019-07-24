@@ -59,7 +59,7 @@ public class LoginActivity extends BaseActivity {
                 if(name.equals("") || password.equals("")){
                     MsgUtil.msg(LoginActivity.this,"用户名密码不能为空！");
                 }else{
-                    AuthUtil.auth(name,password,new RetrofitRequest.ResultHandler<User>(LoginActivity.this) {
+                    AuthUtil.login(name,password,new RetrofitRequest.ResultHandler<User>(LoginActivity.this) {
                         @Override
                         public void onBeforeResult() {
                             // 这里可以放关闭loading

@@ -65,7 +65,7 @@ public class AddActivity extends BaseActivity {
                 params.put("className",className);
                 params.put("teacherId", AuthUtil.user.getId());
 
-                RetrofitRequest.sendPostRequest(url, params, AuthUtil.user.getToken(), Course.class, false,
+                RetrofitRequest.sendPostRequest(url, params, Course.class, false,
                         new RetrofitRequest.ResultHandler<Course>(AddActivity.this) {
                             @Override
                             public void onBeforeResult() {

@@ -21,8 +21,4 @@ public interface GetRequest {
      */
     @GET
     Call<ResponseBody> getUrl(@Url String url,@QueryMap Map<String, Object> map);
-
-    @GET
-    Call<ResponseBody> getUrl(@Header("Authorization") String token, @Url String url,@QueryMap Map<String, Object> map);
-
 }
