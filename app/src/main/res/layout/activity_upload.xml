@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:layout_margin="20dp"
     tools:context=".UploadActivity">
-
+    <!--上传照片页面-->
     <Button
         android:id="@+id/b_ok"
         android:layout_width="match_parent"

@@ -3,7 +3,6 @@ package com.lyzyxy.attendance.util;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.lyzyxy.attendance.CourseListActivity;
 import com.lyzyxy.attendance.LoginActivity;
 import com.lyzyxy.attendance.R;
 import com.lyzyxy.attendance.model.User;

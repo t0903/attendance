@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.lyzyxy.attendance.SignActivity;
+
 import java.io.IOException;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camera.PreviewCallback {
@@ -46,6 +48,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mCamera.setPreviewCallback(this);
         size = mCamera.getParameters().getPreviewSize();
         try {
+            ((SignActivity)getContext()).setCameraPreviewSize(this.getWidth(), this.getHeight(),
+                    size.width, size.height);
+
             mCamera.setPreviewDisplay(holder);
             mCamera.setDisplayOrientation(mOrienta);
             mCamera.startPreview();

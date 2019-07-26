@@ -5,7 +5,7 @@
     style="@style/MatchWrap"
     android:layout_alignParentBottom="true"
     android:padding="4dp">
-
+    <!--相机菜单-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

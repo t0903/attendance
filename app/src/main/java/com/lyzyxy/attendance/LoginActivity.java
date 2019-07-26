@@ -80,10 +80,15 @@ public class LoginActivity extends BaseActivity {
                             }
                             editor.apply();
 
-                            //CourseListActivity.startActivity(LoginActivity.this,CourseListActivity.class);
-                            CourseActivity.startActivity(LoginActivity.this,CourseActivity.class);
+                            if(AuthUtil.user != null) {
 
-                            finish();
+                                //CourseListActivity.startActivity(LoginActivity.this,CourseListActivity.class);
+                                CourseActivity.startActivity(LoginActivity.this, CourseActivity.class);
+
+                                finish();
+                            }else {
+                                MsgUtil.msg(LoginActivity.this,"用户不存在！");
+                            }
                         }
 
                         @Override

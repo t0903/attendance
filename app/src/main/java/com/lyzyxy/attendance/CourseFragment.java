@@ -1,14 +1,18 @@
 package com.lyzyxy.attendance;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.lyzyxy.attendance.model.Course;
 import com.lyzyxy.attendance.network.RetrofitRequest;
@@ -23,65 +27,65 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CourseListActivity extends BaseActivity {
-    private List<Course> courseList;
-    CourseAdapter adapter;
-    RecyclerView rv_course;
+
+public class CourseFragment extends Fragment {
+    private List<Course> list;
+
+    private RecyclerView recyclerView;
+    private CourseAdapter adapter;
+
+    private Context context;
+    AppCompatActivity mAppCompatActivity;
+
+    public CourseFragment() {
+
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_list);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        list = new ArrayList<>();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_course, container, false);
+
+        context = getContext();
+
+        mAppCompatActivity = (AppCompatActivity) getActivity();
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("");
-        //toolbar.setNavigationIcon(R.drawable.extend);
-        setSupportActionBar(toolbar);
+
+        mAppCompatActivity.setSupportActionBar(toolbar);
 
         toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.extend));
 
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                AddActivity.startActivity(CourseListActivity.this,AddActivity.class);
-//            }
-//        });
+        setHasOptionsMenu(true);
 
-        rv_course = findViewById(R.id.rv_course);
-        LinearLayoutManager llm = new LinearLayoutManager(CourseListActivity.this);
-        rv_course.setLayoutManager(llm);
-
-
+        recyclerView = view.findViewById(R.id.course);
+        adapter = new CourseAdapter(context,list);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         updateCourses();
+
+        return view;
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(data != null) {
-            switch (requestCode) {
-                case 1:
-                    if(resultCode == RESULT_OK) {
-                        Course course = (Course) data.getSerializableExtra("data");
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu,inflater);
 
-                        if (course != null) {
-                            courseList.add(course);
-                            adapter.setData(courseList);
-                        }
-                    }
-                    break;
-                default:
-            }
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
         if(AuthUtil.user != null && AuthUtil.user.getIsTeacher() == 1)
-            getMenuInflater().inflate(R.menu.menu_left,menu);
+            inflater.inflate(R.menu.menu_left,menu);
         else
-            getMenuInflater().inflate(R.menu.menu_right,menu);
+            inflater.inflate(R.menu.menu_right,menu);
         setIconsVisible(menu,true);
-        return true;
     }
 
     @Override
@@ -89,12 +93,13 @@ public class CourseListActivity extends BaseActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.create:
-                AddActivity.startActivityForResult(CourseListActivity.this,AddActivity.class,1);
+                AddActivity.startActivityForResult(context,AddActivity.class,1);
                 //AddActivity.startActivity(CourseListActivity.this,AddActivity.class);
                 break;
 
             case R.id.join:
-                ScanActivity.startActivity(CourseListActivity.this,ScanActivity.class);
+                ScanActivity.startActivityForResult(context,ScanActivity.class,2);
+                //ScanActivity.startActivity(context,ScanActivity.class);
                 break;
         }
         return true;
@@ -121,13 +126,22 @@ public class CourseListActivity extends BaseActivity {
         }
     }
 
-    private void updateCourses(){
-        //TODO 当用户为学生时，显示学生加入的班课
-        String url = Constant.URL_BASE + "course/getCourses";
+    public void addCourse(Course c){
+        list.add(c);
+        adapter.setData(list);
+    }
+
+    public void updateCourses(){
+        String url = null;
+        if(AuthUtil.user.getIsTeacher() == 1)//当为老师时，显示老师的所有课程
+            url = Constant.URL_BASE + "course/getCourses";
+        else//当为学生时，显示学生加入的课程
+            url = Constant.URL_BASE + "course/getJoinedCourses";
+
         Map<String,Object> params = new HashMap<String, Object>();
         params.put("id", AuthUtil.user.getId());
         RetrofitRequest.sendPostRequest(url, params, Course.class, true,
-                new RetrofitRequest.ResultHandler<List<Course>>(CourseListActivity.this) {
+                new RetrofitRequest.ResultHandler<List<Course>>(context) {
                     @Override
                     public void onBeforeResult() {
                         // 这里可以放关闭loading
@@ -136,13 +150,13 @@ public class CourseListActivity extends BaseActivity {
                     @Override
                     public void onResult(RequestResult<List<Course>> r) {
                         if(r.getCode() == Constant.SUCCESS){
-                            courseList = r.getData();
-                            adapter = new CourseAdapter(CourseListActivity.this,courseList);
-                            rv_course.setAdapter(adapter);
+                            list = r.getData();
+
+                            adapter.setData(list);
                         }else if(!r.getMsg().equals("")){
-                            MsgUtil.msg(CourseListActivity.this,r.getMsg());
+                            MsgUtil.msg(context,r.getMsg());
                         }else{
-                            MsgUtil.msg(CourseListActivity.this,R.string.net_server_error);
+                            MsgUtil.msg(context,R.string.net_server_error);
                         }
                     }
 
@@ -152,5 +166,4 @@ public class CourseListActivity extends BaseActivity {
                     }
                 });
     }
-
 }

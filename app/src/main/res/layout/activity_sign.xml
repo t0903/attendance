@@ -4,14 +4,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <!--扫脸签到页面-->
     <FrameLayout
         android:id="@+id/camera_preview"
-        android:layout_width="200dp"
-        android:layout_height="300dp" />
-
-    <ImageView
-        android:id="@+id/iv_im"
-        android:layout_width="200dp"
-        android:layout_height="300dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

@@ -1,7 +1,9 @@
 package com.lyzyxy.attendance;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lyzyxy.attendance.model.Course;
+import com.lyzyxy.attendance.util.AuthUtil;
 
 import java.util.List;
 
@@ -28,7 +31,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     private Context context;
     private List<Course> courseList;
 
-    public CourseAdapter(Context context,List<Course> courseList){
+    public CourseAdapter(Context context, List<Course> courseList){
         this.context = context;
         this.courseList = courseList;
     }
@@ -49,7 +52,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             public void onClick(View view) {
                 int position = viewHolder.getAdapterPosition();
 
-                Course course = courseList.get(position);
+                CourseActivity.course = courseList.get(position);
+
+                MemberActivity.startActivity(context,MemberActivity.class);
             }
         });
 

@@ -10,9 +10,13 @@ import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 
+import com.lyzyxy.attendance.CourseActivity;
+import com.lyzyxy.attendance.SignActivity;
 import com.lyzyxy.attendance.network.RetrofitRequest;
 import com.lyzyxy.attendance.network.result.RequestResult;
+import com.lyzyxy.attendance.util.AuthUtil;
 import com.lyzyxy.attendance.util.Constant;
+import com.lyzyxy.attendance.util.MsgUtil;
 import com.zxy.tiny.Tiny;
 import com.zxy.tiny.callback.FileWithBitmapCallback;
 import java.io.ByteArrayOutputStream;
@@ -32,6 +36,11 @@ public class ProcessWithAsyncTask extends AsyncTask<byte[], Void, String> {
     public ProcessWithAsyncTask(Context context, Camera.Size size) {
         this.context = context;
         this.size = size;
+    }
+
+    public void clear(){
+        ProcessWithAsyncTask.uploading = 0;//上传的帧数
+        ProcessWithAsyncTask.upload = false;//当有一帧图片在上传，则不再上传其他帧
     }
 
     @Override
@@ -63,9 +72,13 @@ public class ProcessWithAsyncTask extends AsyncTask<byte[], Void, String> {
                     public void callback(boolean isSuccess, Bitmap bitmap, String outfile, Throwable t) {
                         File file = new File(outfile);
 
-                        String url = Constant.URL_BASE + "user/uploading";
+                        String url = Constant.URL_BASE + "user/sign";
 
                         Map<String, Object> requestMap = new HashMap<>();
+                        requestMap.put("studentId", AuthUtil.user.getId());
+                        requestMap.put("courseId", CourseActivity.course.getId());
+                        requestMap.put("recordId", SignActivity.recordId);
+                        requestMap.put("location", SignActivity.location);
 
                         RetrofitRequest.fileUpload(url, file,requestMap,String.class, false,
                                 new RetrofitRequest.ResultHandler<String>(context) {
@@ -77,12 +90,14 @@ public class ProcessWithAsyncTask extends AsyncTask<byte[], Void, String> {
 
                                     @Override
                                     public void onResult(RequestResult<String> t) {
-                                        System.out.print("aaa");
+                                        clear();
+                                        MsgUtil.msg(context,t.getMsg());
+                                        ((SignActivity)context).stopPreview();
                                     }
 
                                     @Override
                                     public void onAfterFailure() {
-
+                                        clear();
                                     }
                                 });
                     }

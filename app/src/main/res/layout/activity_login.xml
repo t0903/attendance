@@ -7,7 +7,7 @@
     android:layout_margin="20dp"
     android:orientation="vertical"
     tools:context=".LoginActivity">
-
+    <!--登录页面-->
     <EditText
         android:id="@+id/et_name"
         android:layout_width="match_parent"
