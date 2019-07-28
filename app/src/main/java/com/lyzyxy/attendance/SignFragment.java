@@ -24,7 +24,6 @@ import com.lyzyxy.attendance.util.AuthUtil;
 import com.lyzyxy.attendance.util.Constant;
 import com.lyzyxy.attendance.util.LocationUtil;
 import com.lyzyxy.attendance.util.MsgUtil;
-import com.qiniu.util.Auth;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -83,8 +82,8 @@ public class SignFragment extends Fragment {
     private void ifSign(){
         String location = getLocation();
 
-        if(location == null)
-            return;
+//        if(location == null)
+//            return;
 
         String url = Constant.URL_BASE + "user/ifSign";
         Map<String,Object> params = new HashMap<String, Object>();
@@ -125,7 +124,7 @@ public class SignFragment extends Fragment {
         if (net != null) {
             return net.getLatitude() + "," + net.getLongitude();
         }
-        return null;
+        return "";
     }
 
     public void checkPermission(){
@@ -162,9 +161,8 @@ public class SignFragment extends Fragment {
     private void launch(){
         String location = getLocation();
 
-        if(location == null)
-            return;
-
+//        if(location == null)
+//            return;
 
         String url = Constant.URL_BASE + "user/launch";
         Map<String,Object> params = new HashMap<String, Object>();
@@ -184,6 +182,7 @@ public class SignFragment extends Fragment {
                         if(r.getCode() == Constant.SUCCESS){
                             MsgUtil.msg(context,"发起签到成功！");
                             //TODO 跳转到签到页面 观看签到情况
+                            SigningActivity.startActivity(context,SigningActivity.class);
                         }else{
                             MsgUtil.msg(context,r.getMsg());
                         }

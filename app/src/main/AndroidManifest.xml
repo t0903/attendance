@@ -17,16 +17,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".SigningActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".MemberActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CourseActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".SignActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".UploadActivity"></activity>
+        <activity
+            android:name=".SignActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UploadActivity" />
         <activity
             android:name=".GenerateActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -39,12 +41,13 @@
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScanActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <!-- 7.0以上摄像头调取 -->
+        <activity
+            android:name=".ScanActivity"
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- 7.0以上摄像头调取 -->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.lyzyxy.attendance.fileprovider"

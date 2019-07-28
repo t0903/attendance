@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            android:text="第一名"/>
+            android:text="第1名"/>
         <TextView
             android:id="@+id/rate"
             android:layout_width="wrap_content"
