@@ -8,12 +8,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.lyzyxy.attendance.network.RetrofitRequest;
+import com.lyzyxy.attendance.network.result.RequestResult;
 import com.lyzyxy.attendance.util.Constant;
+import com.lyzyxy.attendance.util.MsgUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -91,7 +96,30 @@ public class SigningActivity extends BaseActivity {
                 .setPositiveButton("放弃", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                        String url = Constant.URL_BASE + "user/cancelSign";
+                        Map<String,Object> params = new HashMap<String, Object>();
+                        params.put("courseId",CourseActivity.course.getId());
+                        RetrofitRequest.sendPostRequest(url, params, null, false,
+                                new RetrofitRequest.ResultHandler(SigningActivity.this) {
+                                    @Override
+                                    public void onBeforeResult() {
+                                        // 这里可以放关闭loading
+                                    }
+
+                                    @Override
+                                    public void onResult(RequestResult r) {
+                                        if(r.getCode() == Constant.SUCCESS){
+                                            finish();
+                                        }else{
+                                            MsgUtil.msg(SigningActivity.this,"取消失败！");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onAfterFailure() {
+                                        // 这里可以放关闭loading
+                                    }
+                                });
                     }
                 })
                 .setNegativeButton("不放弃", new DialogInterface.OnClickListener() {

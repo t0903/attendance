@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lyzyxy.attendance.model.User;
+import com.lyzyxy.attendance.model.dto.RecordDto;
+import com.lyzyxy.attendance.model.dto.SignDto;
 import com.lyzyxy.attendance.network.RetrofitRequest;
 import com.lyzyxy.attendance.network.result.RequestResult;
 import com.lyzyxy.attendance.util.AuthUtil;
@@ -26,6 +29,7 @@ import com.lyzyxy.attendance.util.LocationUtil;
 import com.lyzyxy.attendance.util.MsgUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +39,7 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class SignFragment extends Fragment {
-    private List list;
+    private List<SignDto> list;
 
     Context context;
     AppCompatActivity mAppCompatActivity;
@@ -47,6 +51,14 @@ public class SignFragment extends Fragment {
 
     public SignFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        list = new ArrayList<>();
+        //TODO 添加数据
     }
 
 
@@ -71,12 +83,44 @@ public class SignFragment extends Fragment {
         });
 
         recyclerView = view.findViewById(R.id.records);
-        signAdapter = new SignAdapter(context);
+        signAdapter = new SignAdapter(context,list);
 
         recyclerView.setAdapter(signAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+        getData();
+
         return view;
+    }
+
+    private void getData(){
+        String url = Constant.URL_BASE + "user/signRecords";
+        Map<String,Object> params = new HashMap<String, Object>();
+        params.put("courseId", CourseActivity.course.getId());
+
+        RetrofitRequest.sendPostRequest(url, params, SignDto.class, true,
+                new RetrofitRequest.ResultHandler<List<SignDto>>(context) {
+                    @Override
+                    public void onBeforeResult() {
+                        // 这里可以放关闭loading
+                    }
+
+                    @Override
+                    public void onResult(RequestResult<List<SignDto>> r) {
+                        if(r.getCode() == Constant.SUCCESS){
+                            list = r.getData();
+
+                            signAdapter.setData(list);
+                        }else{
+                            MsgUtil.msg(context,r.getMsg());
+                        }
+                    }
+
+                    @Override
+                    public void onAfterFailure() {
+                        // 这里可以放关闭loading
+                    }
+                });
     }
 
     private void ifSign(){

@@ -9,6 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lyzyxy.attendance.model.dto.RecordDto;
+import com.lyzyxy.attendance.model.dto.SignDto;
+import com.lyzyxy.attendance.util.DateUtil;
+
+import java.util.List;
+
 public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder{
         View view;
@@ -24,9 +30,16 @@ public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
     }
 
     private Context context;
+    private List<SignDto> list;
 
-    public SignAdapter(Context context){
+    public SignAdapter(Context context,List<SignDto> list){
         this.context = context;
+        this.list = list;
+    }
+
+    public void setData(List<SignDto> list) {
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -49,12 +62,19 @@ public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        final SignDto bean = list.get(position);
 
+        //2019-07-25 星期四 签到
+        holder.tv_title.setText(DateUtil.convert(bean.getEnd(),DateUtil.DATE_FORMAT) + " "
+                + DateUtil.getWeekOfDate(bean.getEnd()) + " 签到");
+        holder.tv_time.setText(DateUtil.convert(bean.getEnd(),DateUtil.FORMAT_HH_MM));
+        //36人 / 38人
+        holder.tv_summary.setText(bean.getCount() +"人 / "+bean.getSum()+"人");
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return list.size();
     }
 
 
