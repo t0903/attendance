@@ -1,8 +1,10 @@
 package com.lyzyxy.attendance.util;
 
 import com.lyzyxy.attendance.model.dto.RecordDto;
+import com.lyzyxy.attendance.model.dto.SignResult;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommonUtil {
     /**

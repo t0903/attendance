@@ -3,7 +3,7 @@ package com.lyzyxy.attendance.model.dto;
 import java.util.Date;
 
 public class SignDto {
-    private int id;
+    private int id;//recordId
     private int courseId;
     private Date start;
     private Date end;

@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//TODO 修改签到结果后刷新数据
 
 public class MemberFragment extends Fragment {
     private List<RecordDto> list;

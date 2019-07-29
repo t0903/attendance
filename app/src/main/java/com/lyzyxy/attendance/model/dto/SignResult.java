@@ -1,12 +1,14 @@
 package com.lyzyxy.attendance.model.dto;
 
-public class RecordDto {
+public class SignResult {
     private int id;//学生Id
     private String name;
     private String no;
     private String photo;
+    private Integer signId;
     private Double rate;
-    private Integer loss;
+    private Integer distance;
+    private String remarks;
 
     public int getId() {
         return id;
@@ -42,9 +44,15 @@ public class RecordDto {
         this.photo = photo;
     }
 
+    public Integer getSignId() {
+        return signId;
+    }
+
+    public void setSignId(Integer signId) {
+        this.signId = signId;
+    }
+
     public Double getRate() {
-        if(rate == null)
-            return 0.;
         return rate;
     }
 
@@ -52,13 +60,19 @@ public class RecordDto {
         this.rate = rate;
     }
 
-    public Integer getLoss() {
-        if(loss == null)
-            return 0;
-        return loss;
+    public Integer getDistance() {
+        return distance;
     }
 
-    public void setLoss(Integer loss) {
-        this.loss = loss;
+    public void setDistance(Integer distance) {
+        this.distance = distance;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

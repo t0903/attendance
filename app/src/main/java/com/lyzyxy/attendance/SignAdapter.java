@@ -11,14 +11,16 @@ import android.widget.TextView;
 
 import com.lyzyxy.attendance.model.dto.RecordDto;
 import com.lyzyxy.attendance.model.dto.SignDto;
+import com.lyzyxy.attendance.util.AuthUtil;
 import com.lyzyxy.attendance.util.DateUtil;
 
 import java.util.List;
 
 public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
         View view;
-        TextView tv_title,tv_time,tv_summary;
+        TextView tv_title, tv_time, tv_summary, tv_go;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -26,13 +28,14 @@ public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
             tv_title = itemView.findViewById(R.id.title);
             tv_time = itemView.findViewById(R.id.time);
             tv_summary = itemView.findViewById(R.id.summary);
+            tv_go = itemView.findViewById(R.id.tv_go);
         }
     }
 
     private Context context;
     private List<SignDto> list;
 
-    public SignAdapter(Context context,List<SignDto> list){
+    public SignAdapter(Context context, List<SignDto> list) {
         this.context = context;
         this.list = list;
     }
@@ -52,12 +55,15 @@ public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 int position = viewHolder.getAdapterPosition();
+                SignDto dto = list.get(position);
 
-
+                int recordId = dto.getId();
+                int courseId = dto.getCourseId();
+                ResultActivity.startActivity(context, recordId, courseId, ResultActivity.class);
             }
         });
 
-        return  viewHolder;
+        return viewHolder;
     }
 
     @Override
@@ -65,11 +71,12 @@ public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
         final SignDto bean = list.get(position);
 
         //2019-07-25 星期四 签到
-        holder.tv_title.setText(DateUtil.convert(bean.getEnd(),DateUtil.DATE_FORMAT) + " "
+        holder.tv_title.setText(DateUtil.convert(bean.getEnd(), DateUtil.DATE_FORMAT) + " "
                 + DateUtil.getWeekOfDate(bean.getEnd()) + " 签到");
-        holder.tv_time.setText(DateUtil.convert(bean.getEnd(),DateUtil.FORMAT_HH_MM));
+        holder.tv_time.setText(DateUtil.convert(bean.getEnd(), DateUtil.FORMAT_HH_MM));
+
         //36人 / 38人
-        holder.tv_summary.setText(bean.getCount() +"人 / "+bean.getSum()+"人");
+        holder.tv_summary.setText(bean.getCount() + "人 / " + bean.getSum() + "人");
     }
 
     @Override
