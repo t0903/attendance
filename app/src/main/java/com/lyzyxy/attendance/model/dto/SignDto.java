@@ -7,9 +7,9 @@ public class SignDto {
     private int courseId;
     private Date start;
     private Date end;
-    private int count;
+    private Integer count;
     private String location;
-    private int sum;
+    private Integer sum;
 
     public int getId() {
         return id;
@@ -44,6 +44,8 @@ public class SignDto {
     }
 
     public int getCount() {
+        if(count == null)
+            return 0;
         return count;
     }
 
@@ -60,6 +62,8 @@ public class SignDto {
     }
 
     public int getSum() {
+        if(sum == null)
+            return 0;
         return sum;
     }
 

@@ -160,5 +160,14 @@
         android:text="保存"
         android:textSize="16sp" />
 
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:text="退出"
+        android:textSize="16sp"/>
+
 
 </LinearLayout>

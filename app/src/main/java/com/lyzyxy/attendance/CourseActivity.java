@@ -65,7 +65,6 @@ public class CourseActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mFragments.get(2).onActivityResult(requestCode,resultCode,data);
         if(data != null) {
             switch (requestCode) {
                 case 1://创建班课返回
@@ -83,6 +82,7 @@ public class CourseActivity extends BaseActivity {
                     }
                     break;
                 default:
+                    mFragments.get(2).onActivityResult(requestCode,resultCode,data);
             }
         }
     }

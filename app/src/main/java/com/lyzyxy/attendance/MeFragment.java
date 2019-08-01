@@ -83,6 +83,15 @@ public class MeFragment extends Fragment {
             }
         });
 
+        view.findViewById(R.id.logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AuthUtil.user = null;
+                ActivityCollector.finishAll();
+                LoginActivity.startActivity(context,LoginActivity.class);
+            }
+        });
+
         return view;
     }
 

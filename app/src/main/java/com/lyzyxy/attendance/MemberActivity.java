@@ -69,7 +69,6 @@ public class MemberActivity extends BaseActivity {
         mFragments = new ArrayList<>();
         mFragments.add(new MemberFragment());
         mFragments.add(new SignFragment());
-        mFragments.add(new MemberDetailFragment());
 
         setFragmentPosition(0);
     }
