@@ -35,11 +35,11 @@ public class CourseActivity extends BaseActivity {
                 case R.id.navigation_home:
                     setFragmentPosition(COURSE_INDEX);
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_other:
                     setFragmentPosition(1);
                     return true;
-                case R.id.navigation_notifications:
-
+                case R.id.navigation_me:
+                    setFragmentPosition(2);
                     return true;
             }
             return false;
@@ -58,7 +58,14 @@ public class CourseActivity extends BaseActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        mFragments.get(2).onRequestPermissionsResult(requestCode,permissions,grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mFragments.get(2).onActivityResult(requestCode,resultCode,data);
         if(data != null) {
             switch (requestCode) {
                 case 1://创建班课返回
@@ -83,6 +90,8 @@ public class CourseActivity extends BaseActivity {
     private void init(){
         mFragments = new ArrayList<>();
         mFragments.add(new CourseFragment());
+        mFragments.add(new OtherFragment());
+        mFragments.add(new MeFragment());
 
         setFragmentPosition(COURSE_INDEX);
     }

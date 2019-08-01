@@ -215,19 +215,20 @@ public class SignFragment extends Fragment {
         params.put("courseId",CourseActivity.course.getId());
         params.put("location",location);
 
-        RetrofitRequest.sendPostRequest(url, params, null, false,
-                new RetrofitRequest.ResultHandler(context) {
+        RetrofitRequest.sendPostRequest(url, params, Integer.class, false,
+                new RetrofitRequest.ResultHandler<Integer>(context) {
                     @Override
                     public void onBeforeResult() {
                         // 这里可以放关闭loading
                     }
 
                     @Override
-                    public void onResult(RequestResult r) {
+                    public void onResult(RequestResult<Integer> r) {
                         if(r.getCode() == Constant.SUCCESS){
                             MsgUtil.msg(context,"发起签到成功！");
                             //TODO 跳转到签到页面 观看签到情况
-                            SigningActivity.startActivity(context,SigningActivity.class);
+                            int recordId = r.getData();
+                            SigningActivity.startActivity(context,recordId,SigningActivity.class);
                         }else{
                             MsgUtil.msg(context,r.getMsg());
                         }

@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -27,6 +28,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.http.Part;
+import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 /**
  * Retrofit请求类
@@ -205,9 +209,7 @@ public class RetrofitRequest {
         Map<String, RequestBody> paramMap = new HashMap<>();
         RetrofitRequest.addMultiPart(paramMap, "file", file);
 
-        Call<ResponseBody> call = null;
-
-        call = fileRequest.postFile(url, paramMap,requestMap);
+        Call<ResponseBody> call = fileRequest.postFile(url, paramMap,requestMap);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -290,7 +292,9 @@ public class RetrofitRequest {
      * @param obj      值
      */
     private static void addMultiPart(Map<String, RequestBody> paramMap, String key, Object obj) {
-        if (obj instanceof String) {
+        if(obj == null){
+
+        }else if (obj instanceof String) {
             RequestBody body = RequestBody.create(MediaType.parse("text/plain;charset=UTF-8"), (String) obj);
             paramMap.put(key, body);
         } else if (obj instanceof File) {
